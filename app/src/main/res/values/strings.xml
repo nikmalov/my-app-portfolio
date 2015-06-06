@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">PortfolioProject</string>
 
-    <string name="hello_world">Hello world!</string>
+    <string name="core_menu_header">My Portfolio Apps</string>
     <string name="action_settings">Settings</string>
     <string name="spotify_streamer">Spotify Streamer</string>
     <string name="scores_app">Scores App</string>

@@ -12,79 +12,55 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="My Portfolio Apps"
+        android:text="@string/core_menu_header"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/spotify_streamer"
-        android:id="@+id/button"
-        android:layout_below="@+id/textView"
+        android:id="@+id/app1LaunchButton"
+        android:layout_below="@id/textView"
         android:onClick="showMessage"
-        android:layout_marginTop="60dp"
-        android:layout_alignEnd="@+id/button2"
-        android:layout_alignStart="@+id/button2"
-        android:typeface="serif"
-        android:background="#FFF3E0"/>
+        android:layout_marginTop="40dp"
+        android:background="@color/firstAppMainColor"
+        style="@style/AppLaunchButton"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/scores_app"
-        android:id="@+id/button2"
+        android:id="@+id/app2LaunchButton"
         android:onClick="showMessage"
-        android:layout_below="@+id/button"
-        android:layout_alignEnd="@+id/button3"
-        android:layout_alignStart="@+id/button3"
-        android:typeface="serif"
-        android:background="#FFCC80"/>
+        android:layout_below="@id/app1LaunchButton"
+        android:background="@color/secondAppMainColor"
+        style="@style/AppLaunchButton"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/library_app"
-        android:id="@+id/button3"
+        android:id="@+id/app3LaunchButton"
         android:onClick="showMessage"
-        android:layout_below="@+id/button2"
-        android:layout_alignEnd="@+id/button4"
-        android:layout_alignStart="@+id/button4"
-        android:typeface="serif"
-        android:background="#FFA726"
-        />
+        android:layout_below="@id/app2LaunchButton"
+        android:background="@color/thirdAppMainColor"
+        style="@style/AppLaunchButton"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/build_it_bigger"
-        android:id="@+id/button4"
-        android:layout_below="@+id/button3"
-        android:layout_alignEnd="@+id/button5"
-        android:layout_alignStart="@+id/button5"
-        android:typeface="serif"
-        android:background="#FB8C00"/>
+        android:id="@+id/app4LaunchButton"
+        android:layout_below="@id/app3LaunchButton"
+        android:background="@color/forthAppMainColor"
+        style="@style/AppLaunchButton"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/xyz_reader"
-        android:id="@+id/button5"
-        android:layout_below="@+id/button4"
-        android:layout_alignEnd="@+id/button6"
-        android:layout_alignStart="@+id/button6"
-        android:typeface="serif"
-        android:background="#EF6C00"/>
+        android:id="@+id/app5LaunchButton"
+        android:layout_below="@id/app4LaunchButton"
+        android:background="@color/fifthAppMainColor"
+        style="@style/AppLaunchButton"/>
 
     <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
         android:text="@string/capstone_project"
-        android:id="@+id/button6"
-        android:layout_below="@+id/button5"
-        android:layout_centerHorizontal="true"
-        android:textColor="#ffffff"
-        android:typeface="serif"
-        android:background="#0277BD"/>
+        android:id="@+id/app6LaunchButton"
+        android:layout_below="@id/app5LaunchButton"
+        android:textColor="@color/white"
+        android:background="@color/sixthAppMainColor"
+        style="@style/AppLaunchButton"/>
 </RelativeLayout>
