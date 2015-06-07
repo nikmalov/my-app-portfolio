@@ -11,6 +11,9 @@ android {
         versionCode 1
         versionName "1.0"
     }
+    repositories {
+        mavenCentral()
+    }
     buildTypes {
         release {
             minifyEnabled false
@@ -21,4 +24,5 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
+    compile 'com.squareup.picasso:picasso:2.5.2'
 }

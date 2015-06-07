@@ -16,6 +16,14 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".popularVideoApp.VideoGridActivity"
+            android:label="@string/title_activity_video_grid"
+            android:parentActivityName=".CoreMenu" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nikmalov.portfolioproject.CoreMenu" />
+        </activity>
     </application>
 
 </manifest>

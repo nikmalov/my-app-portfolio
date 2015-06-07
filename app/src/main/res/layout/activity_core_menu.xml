@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textAppearance="?android:attr/textAppearanceLarge"
-        android:text="@string/core_menu_header"
+        android:text="@string/core_menu_title"
         android:id="@+id/textView"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"/>
@@ -21,7 +21,7 @@
         android:text="@string/popular_movies"
         android:id="@+id/app1LaunchButton"
         android:layout_below="@id/textView"
-        android:onClick="showMessage"
+        android:onClick="launchApp"
         android:layout_marginTop="40dp"
         android:background="@color/firstAppMainColor"
         style="@style/AppLaunchButton"/>

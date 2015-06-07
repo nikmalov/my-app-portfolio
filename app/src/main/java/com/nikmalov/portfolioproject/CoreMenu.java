@@ -1,11 +1,17 @@
 package com.nikmalov.portfolioproject;
 
 import android.app.Activity;
+import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.nikmalov.portfolioproject.popularVideoApp.VideoGridActivity;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class CoreMenu extends Activity {
 
@@ -18,11 +24,18 @@ public class CoreMenu extends Activity {
 	public Button xyzReaderButton;
 	public Button capstoneButton;
 
+	private final static String BUTTON_NOT_FOUND = "Button wasn't found.";
+	private static Map<CharSequence, Class> projectButtonToActivityMap = new HashMap<>(6);
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_core_menu);
 		setButtons();
+		Resources resources = getResources();
+		projectButtonToActivityMap.
+			put(resources.getString(R.string.popular_movies), VideoGridActivity.class);
+		//new mappings are to be introduced
 	}
 
 	public void setButtons() {
@@ -55,22 +68,33 @@ public class CoreMenu extends Activity {
 
 	public void showMessage(int appNameId) {
 		String appName = getResources().getString(appNameId);
-		if (mAppToast != null)
-			mAppToast.cancel();
-
-		mAppToast = Toast.makeText(getApplicationContext(),
-			"This button will launch my " + appName + "!", Toast.LENGTH_SHORT);
-		mAppToast.show();
+		displayMessage("This button will launch my " + appName + "!");
 	}
 
 	public void showMessage(View buttonView) {
 		if (!(buttonView instanceof Button))
 			return;
 		Button button = (Button)buttonView;
+		displayMessage("This button will launch my " + button.getText() + "!");
+	}
+
+	public void launchApp(View buttonView) {
+		if (!(buttonView instanceof Button))
+			return;
+		Button button = (Button)buttonView;
+		Class activityClass = projectButtonToActivityMap.get(button.getText());
+		if (activityClass == null) {
+			displayMessage(BUTTON_NOT_FOUND);
+		}
+		Intent intent = new Intent(getApplicationContext(), activityClass);
+		startActivity(intent);
+
+	}
+
+	private void displayMessage(String message) {
 		if (mAppToast != null)
 			mAppToast.cancel();
-		mAppToast = Toast.makeText(getApplicationContext(),
-			"This button will launch my " + button.getText() + "!", Toast.LENGTH_SHORT);
+		mAppToast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
 		mAppToast.show();
 	}
 }
