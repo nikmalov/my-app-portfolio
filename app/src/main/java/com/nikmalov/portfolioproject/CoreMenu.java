@@ -11,7 +11,7 @@ public class CoreMenu extends Activity {
 
 	private Toast mAppToast;
 
-	public Button spotifyButton;
+	public Button popularMoviesButton;
 	public Button scoresButton;
 	public Button libraryButton;
 	public Button buildItButton;
@@ -27,7 +27,7 @@ public class CoreMenu extends Activity {
 
 	public void setButtons() {
 		//for learning purposes first 3 buttons implement xml-based on-click behaviour
-		spotifyButton = (Button)findViewById(R.id.app1LaunchButton);
+		popularMoviesButton = (Button)findViewById(R.id.app1LaunchButton);
 		scoresButton = (Button)findViewById(R.id.app2LaunchButton);
 		libraryButton = (Button)findViewById(R.id.app3LaunchButton);
 		buildItButton = (Button)findViewById(R.id.app4LaunchButton);
