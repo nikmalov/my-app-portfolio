@@ -18,7 +18,7 @@
         android:layout_centerHorizontal="true"/>
 
     <Button
-        android:text="@string/spotify_streamer"
+        android:text="@string/popular_movies"
         android:id="@+id/app1LaunchButton"
         android:layout_below="@id/textView"
         android:onClick="showMessage"
