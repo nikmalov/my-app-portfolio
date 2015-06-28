@@ -4,15 +4,20 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.GridView;
 
 import com.nikmalov.portfolioproject.R;
 
 public class VideoGridActivity extends Activity {
 
+	private GridView mGridView;
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_video_grid);
+		mGridView = (GridView)findViewById(R.id.gridView);
+		mGridView.setAdapter(new MoviePosterAdapter(this));
 	}
 
 
