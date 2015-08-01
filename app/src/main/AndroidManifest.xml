@@ -3,6 +3,7 @@
     package="com.nikmalov.portfolioproject" >
 
     <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
 
     <application
         android:allowBackup="true"
@@ -19,7 +20,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".popularVideoApp.VideoGridActivity"
+            android:name=".PopularVideoApp.VideoGridActivity"
             android:label="@string/title_activity_video_grid"
             android:parentActivityName=".CoreMenu" >
             <meta-data

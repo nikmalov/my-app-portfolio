@@ -1,23 +1,23 @@
-package com.nikmalov.portfolioproject.popularVideoApp;
+package com.nikmalov.portfolioproject.PopularVideoApp;
 
-import android.app.Activity;
 import android.os.Bundle;
+import android.support.v4.app.FragmentActivity;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.GridView;
 
 import com.nikmalov.portfolioproject.R;
 
-public class VideoGridActivity extends Activity {
+public class VideoGridActivity extends FragmentActivity {
 
-	private GridView mGridView;
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_video_grid);
-		mGridView = (GridView)findViewById(R.id.gridView);
-		mGridView.setAdapter(new MoviePosterAdapter(this));
+		setContentView(R.layout.video_grid_activity);
+        if (savedInstanceState == null) {
+            getSupportFragmentManager().beginTransaction().
+                    add(R.id.video_grid_activity, new MoviePostersFragment()).commit();
+        }
 	}
 
 

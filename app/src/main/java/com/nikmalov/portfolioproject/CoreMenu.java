@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.nikmalov.portfolioproject.popularVideoApp.VideoGridActivity;
+import com.nikmalov.portfolioproject.PopularVideoApp.VideoGridActivity;
 
 import java.util.HashMap;
 import java.util.Map;
