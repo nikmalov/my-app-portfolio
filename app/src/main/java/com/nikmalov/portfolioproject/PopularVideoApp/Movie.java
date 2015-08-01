@@ -19,6 +19,7 @@ public class Movie {
     public static final String TITLE = "title";
     public static final String GENRE_IDS = "genre_ids";
     public static final String IS_ADULT = "adult";
+    public static final String OVERVIEW = "overview";
     public static final String POSTER_PATH = "poster_path";
 
     public static final String GENRE_ID = "id";
@@ -31,6 +32,7 @@ public class Movie {
     private String title;
     private List<String> genres;
     private boolean isAdult;
+    private String overview;
     private Bitmap poster;
 
 /*    static {
@@ -51,11 +53,12 @@ public class Movie {
         }
     }
 */
-    public Movie(String movieId, String title, String genreIds, String isAdult) {
-        this.movieId = Integer.parseInt(movieId);
+    public Movie(int movieId, String title, List<Integer> genreIds, boolean isAdult, String overview) {
+        this.movieId = movieId;
         this.title = title;
         genres = extractGenres(genreIds);
-        this.isAdult = isAdult.equalsIgnoreCase("true");
+        this.isAdult = isAdult;
+        this.overview = overview;
     }
 
     public Bitmap getPoster() {
@@ -82,14 +85,17 @@ public class Movie {
         return isAdult;
     }
 
-    private static List<String> extractGenres(String genreIds) {
-        String[] splitedGenreIds = genreIds.split(",");
+    public String getOverview() {
+        return overview;
+    }
+
+    private static List<String> extractGenres(List<Integer> genreIds) {
+
         List<String> genres = new ArrayList<>();
-/*        for (String genreId : splitedGenreIds) {
-            genres.add(idGenreMapping.get(Integer.parseInt(genreId)));
+        for (int genreId : genreIds) {
+            genres.add(idGenreMapping.get(genreId));
         }
         return genres;
-*/      return genres;
     }
 
     private static void handleGenreEntry(JsonReader reader) throws IOException {
@@ -105,5 +111,10 @@ public class Movie {
         }
         reader.endObject();
         idGenreMapping.put(genreId, genreName);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        return o instanceof Movie && movieId == ((Movie) o).getMovieId();
     }
 }
