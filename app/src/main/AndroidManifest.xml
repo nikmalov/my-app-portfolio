@@ -27,6 +27,14 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="com.nikmalov.portfolioproject.CoreMenu" />
         </activity>
+        <activity
+            android:name=".PopularVideoApp.MovieDetailActivity"
+            android:label="@string/title_activity_movie_detail"
+            android:parentActivityName=".PopularVideoApp.VideoGridActivity" >
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="com.nikmalov.portfolioproject.PopularVideoApp.VideoGridActivity" />
+        </activity>
     </application>
 
 </manifest>

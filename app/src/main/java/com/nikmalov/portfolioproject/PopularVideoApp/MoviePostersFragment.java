@@ -1,11 +1,15 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
+import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.GridView;
@@ -23,23 +27,46 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.ParsePosition;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 public class MoviePostersFragment extends Fragment {
 
     private static final String LOG_TAG = MoviePostersFragment.class.getSimpleName();
+    public static final String imageUrlAnchor = "http://image.tmdb.org/t/p/";
+    public static final String imgQuality = "w342/";
 
-    private MovieListType defaultType = MovieListType.POPULAR;
+    private MovieListType currentType = MovieListType.POPULAR;
     private MoviePosterAdapter postersAdapter;
-    private final String URL_ANCHOR = "http://api.themoviedb.org/3/movie";
+    private final String URL_REQUEST_ANCHOR = "http://api.themoviedb.org/3/movie";
     private final String API_KEY = "?api_key=41320596822de654b82ddb5d040d4127";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        new MovieGetterAsyncTask().execute(defaultType);
+        setHasOptionsMenu(true);
+        new MovieGetterAsyncTask().execute(currentType);
+    }
+
+    @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie_posters_fragment, menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.sorting_switcher) {
+            currentType = currentType.equals(MovieListType.POPULAR) ? MovieListType.TOP_RATED :
+                    MovieListType.POPULAR;
+            new MovieGetterAsyncTask().execute(currentType);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     @Nullable
@@ -58,8 +85,6 @@ public class MoviePostersFragment extends Fragment {
 
     private class MovieGetterAsyncTask extends AsyncTask<MovieListType, Void, List<Movie>> {
 
-        private final String imageUrlAnchor = "http://image.tmdb.org/t/p/" + "w185/";
-
         @Override
         protected List<Movie> doInBackground(MovieListType... params) {
             if (params[0] == null)
@@ -70,7 +95,7 @@ public class MoviePostersFragment extends Fragment {
             List<Movie> movieList = new ArrayList<>();
 
             try {
-                URL url = new URL(URL_ANCHOR + params[0].urlPostfix + API_KEY);
+                URL url = new URL(URL_REQUEST_ANCHOR + params[0].urlPostfix + API_KEY);
                 urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -109,29 +134,29 @@ public class MoviePostersFragment extends Fragment {
             postersAdapter.setMovieList(movieList);
         }
 
-
         private List<Movie> parseJsonMovieInfo(String jsonInput) throws JSONException {
             JSONObject rawData = new JSONObject(jsonInput);
+            @SuppressLint("SimpleDateFormat")
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             JSONArray movies = rawData.getJSONArray("results");
             List<Movie> result = new ArrayList<>();
             JSONObject movieObject;
 
             for (int i = 0; i < movies.length(); i++) {
                 movieObject = movies.getJSONObject(i);
-                JSONArray genreIdsJsonArray = movieObject.getJSONArray(Movie.GENRE_IDS);
-                List<Integer> genreIds = new ArrayList<>();
-                for (int j = 0; j < genreIdsJsonArray.length(); j++) {
-                    genreIds.add(genreIdsJsonArray.getInt(j));
-                }
+                Date releaseDate = dateFormat.
+                        parse(movieObject.getString(Movie.RELEASE_DATE), new ParsePosition(0));
                 final Movie movie = new Movie(movieObject.getInt(Movie.MOVIE_ID),
                         movieObject.getString(Movie.TITLE),
-                        genreIds,
-                        movieObject.getBoolean(Movie.IS_ADULT),
-                        movieObject.getString(Movie.OVERVIEW));
+                        movieObject.getString(Movie.THUMBNAILS_PATH),
+                        movieObject.getDouble(Movie.USER_RATING),
+                        movieObject.getString(Movie.OVERVIEW),
+                        releaseDate);
                 //set poster image
                 try {
                     movie.setPoster(Picasso.with(getActivity()).
-                            load(imageUrlAnchor + movieObject.getString(Movie.POSTER_PATH)).get());
+                            load(imageUrlAnchor + imgQuality +
+                                    movieObject.getString(Movie.POSTER_PATH)).get());
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Was not able to download and set poster.");
                     e.printStackTrace();

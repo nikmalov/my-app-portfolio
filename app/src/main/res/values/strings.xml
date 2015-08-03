@@ -11,4 +11,7 @@
 
     <string name="title_activity_video_grid">List of Movies</string>
     <string name="sorting_order">Change sorting order</string>
+    <string name="title_activity_movie_detail">Movie details</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="action_settings">Settings</string>
 </resources>
