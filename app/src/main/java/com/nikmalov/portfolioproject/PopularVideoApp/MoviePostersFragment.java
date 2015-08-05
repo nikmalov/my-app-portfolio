@@ -43,7 +43,7 @@ public class MoviePostersFragment extends Fragment {
     private MovieListType currentType = MovieListType.POPULAR;
     private MoviePosterAdapter postersAdapter;
     private final String URL_REQUEST_ANCHOR = "http://api.themoviedb.org/3/movie";
-    private final String API_KEY = "?api_key=41320596822de654b82ddb5d040d4127";
+    private final String API_KEY = "?api_key=" + getString(R.string.api_key);
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
