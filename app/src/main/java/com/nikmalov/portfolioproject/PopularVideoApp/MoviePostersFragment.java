@@ -1,8 +1,13 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
 import android.annotation.SuppressLint;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -40,16 +45,28 @@ public class MoviePostersFragment extends Fragment {
     public static final String imageUrlAnchor = "http://image.tmdb.org/t/p/";
     public static final String imgQuality = "w342/";
 
-    private MovieListType currentType = MovieListType.POPULAR;
+    private MovieListType currentType;
+    private MovieListType lastLoadedType;
+    private SharedPreferences preference;
     private MoviePosterAdapter postersAdapter;
     private final String URL_REQUEST_ANCHOR = "http://api.themoviedb.org/3/movie";
-    private final String API_KEY = "?api_key=" + getString(R.string.api_key);
+    private final String API_KEY = "?api_key=" + "41320596822de654b82ddb5d040d4127";
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
+        preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        currentType = getCurrentSortingType();
         new MovieGetterAsyncTask().execute(currentType);
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        currentType = getCurrentSortingType();
+        if (currentType != lastLoadedType)
+            new MovieGetterAsyncTask().execute(currentType);
     }
 
     @Override
@@ -60,10 +77,8 @@ public class MoviePostersFragment extends Fragment {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        if (id == R.id.sorting_switcher) {
-            currentType = currentType.equals(MovieListType.POPULAR) ? MovieListType.TOP_RATED :
-                    MovieListType.POPULAR;
-            new MovieGetterAsyncTask().execute(currentType);
+        if (id == R.id.action_settings) {
+            startActivity(new Intent(getActivity(), SettingsActivity.class));
             return true;
         }
         return super.onOptionsItemSelected(item);
@@ -81,6 +96,13 @@ public class MoviePostersFragment extends Fragment {
         postersGridView.setAdapter(postersAdapter);
 
         return rootView;
+    }
+
+    private MovieListType getCurrentSortingType() {
+        String sortingTypeString = preference.getString(getString(R.string.sorting_type_key),
+                getString((R.string.sorting_type_popularity)));
+        return getString((R.string.sorting_type_top_rated)).equalsIgnoreCase(sortingTypeString) ?
+                MovieListType.TOP_RATED : MovieListType.POPULAR;
     }
 
     private class MovieGetterAsyncTask extends AsyncTask<MovieListType, Void, List<Movie>> {
@@ -132,6 +154,7 @@ public class MoviePostersFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Movie> movieList) {
             postersAdapter.setMovieList(movieList);
+            lastLoadedType = currentType;
         }
 
         private List<Movie> parseJsonMovieInfo(String jsonInput) throws JSONException {

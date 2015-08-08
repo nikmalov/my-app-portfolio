@@ -1,8 +1,0 @@
-<menu xmlns:android="http://schemas.android.com/apk/res/android"
-      xmlns:tools="http://schemas.android.com/tools"
-      tools:context="com.nikmalov.portfolioproject.popularVideoApp.VideoGridActivity">
-    <item android:id="@+id/sorting_switcher"
-          android:title="@string/sorting_order"
-          android:orderInCategory="100"
-          android:showAsAction="never"/>
-</menu>

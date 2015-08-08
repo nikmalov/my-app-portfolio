@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">PortfolioProject</string>
+    <string name="core_menu_title">Портфолио</string>
+    <string name="sorting_order">Изменить порядок</string>
+    <string name="sorting_type">Упорядочить по</string>
+    <string name="sorting_type_popularity">Популярности</string>
+    <string name="sorting_type_top_rated">Оценкам</string>
+    <string name="title_activity_movie_detail">Подробности</string>
+    <string name="title_activity_video_grid">Фильмы</string>
+    <string name="action_settings">Настройки</string>
+</resources>

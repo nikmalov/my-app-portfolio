@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="sorting_types">
+        <item>By popularity</item>
+        <item>By rating</item>
+    </string-array>
+    <string-array name="sorting_type_values">
+        <item>popularity</item>
+        <item>rating</item>
+    </string-array>
+</resources>
