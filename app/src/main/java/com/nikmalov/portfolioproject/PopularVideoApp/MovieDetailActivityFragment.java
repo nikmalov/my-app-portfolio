@@ -52,7 +52,7 @@ public class MovieDetailActivityFragment extends Fragment {
                 into(thumbnails);
         titleTextView.setText(intent.getStringExtra(Movie.TITLE));
         overviewTextView.setText(intent.getStringExtra(Movie.OVERVIEW));
-        userRating.setRating((float)intent.getDoubleExtra(Movie.USER_RATING, 0));
+        userRating.setRating((float)intent.getDoubleExtra(Movie.USER_RATING, 0)/2);
         releaseDateView.setText(new SimpleDateFormat("dd MMMM yyyy").
                 format(new Date(intent.getLongExtra(Movie.RELEASE_DATE, 0))));
         return rootView;
