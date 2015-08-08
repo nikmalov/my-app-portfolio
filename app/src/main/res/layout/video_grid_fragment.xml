@@ -13,8 +13,7 @@
     <GridView
         android:layout_width="fill_parent"
         android:layout_height="fill_parent"
-        android:columnWidth="90dp"
-        android:verticalSpacing="5dp"
+        android:columnWidth="130dp"
         android:horizontalSpacing="5dp"
         android:id="@+id/postersGridView"
         android:numColumns="auto_fit"/>

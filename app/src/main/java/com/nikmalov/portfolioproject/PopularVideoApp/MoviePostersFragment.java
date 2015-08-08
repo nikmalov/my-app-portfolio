@@ -43,7 +43,7 @@ public class MoviePostersFragment extends Fragment {
 
     private static final String LOG_TAG = MoviePostersFragment.class.getSimpleName();
     public static final String imageUrlAnchor = "http://image.tmdb.org/t/p/";
-    public static final String imgQuality = "w342/";
+    public static final String imgQuality = "w500/";
 
     private MovieListType currentType;
     private MovieListType lastLoadedType;
