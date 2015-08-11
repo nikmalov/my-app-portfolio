@@ -1,11 +1,13 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
 import android.graphics.Bitmap;
+import android.os.Parcel;
+import android.os.Parcelable;
 
 import java.util.Date;
 
 
-public class Movie {
+public class Movie implements Parcelable {
 
     public static final String MOVIE_ID = "id";
     public static final String TITLE = "original_title";
@@ -20,8 +22,8 @@ public class Movie {
     private String thumbnailsPath;
     private double userRating;
     private String overview;
-    private Bitmap poster;
     private Date releaseDate;
+    private Bitmap poster;
 
     public Movie(int movieId, String title, String thumbnailsPath, double userRating,
                  String overview, Date releaseDate)
@@ -70,4 +72,37 @@ public class Movie {
     public boolean equals(Object o) {
         return o instanceof Movie && movieId == ((Movie) o).getMovieId();
     }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        poster.writeToParcel(dest, 0);
+        dest.writeInt(movieId);
+        dest.writeString(title);
+        dest.writeString(thumbnailsPath);
+        dest.writeDouble(userRating);
+        dest.writeString(overview);
+        dest.writeLong(releaseDate.getTime());
+    }
+
+    public final Parcelable.Creator<Movie> CREATOR = new Parcelable.Creator<Movie>() {
+        @Override
+        public Movie createFromParcel(Parcel source) {
+            Bitmap poster = Bitmap.CREATOR.createFromParcel(source);
+            Movie newInstance =
+                    new Movie(source.readInt(), source.readString(), source.readString(),
+                            source.readDouble(), source.readString(), new Date(source.readLong()));
+            newInstance.setPoster(poster);
+            return newInstance;
+        }
+
+        @Override
+        public Movie[] newArray(int size) {
+            return new Movie[size];
+        }
+    };
 }

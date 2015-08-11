@@ -1,12 +1,10 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
 import android.annotation.SuppressLint;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -42,10 +40,12 @@ import java.util.List;
 public class MoviePostersFragment extends Fragment {
 
     private static final String LOG_TAG = MoviePostersFragment.class.getSimpleName();
+    private static final String DATA_STORED = "dataStored";
     public static final String imageUrlAnchor = "http://image.tmdb.org/t/p/";
     public static final String imgQuality = "w500/";
 
     private MovieListType currentType;
+    private ArrayList<Movie> storedMovieList;
     private MovieListType lastLoadedType;
     private SharedPreferences preference;
     private MoviePosterAdapter postersAdapter;
@@ -58,7 +58,19 @@ public class MoviePostersFragment extends Fragment {
         setHasOptionsMenu(true);
         preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
         currentType = getCurrentSortingType();
-        new MovieGetterAsyncTask().execute(currentType);
+        if (savedInstanceState == null || savedInstanceState.isEmpty()) {
+            postersAdapter = new MoviePosterAdapter(getActivity(), Collections.EMPTY_LIST);
+            new MovieGetterAsyncTask().execute(currentType);
+        } else {
+            storedMovieList = savedInstanceState.getParcelableArrayList(DATA_STORED);
+            postersAdapter = new MoviePosterAdapter(getActivity(), storedMovieList);
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(DATA_STORED, storedMovieList);
+        super.onSaveInstanceState(outState);
     }
 
     @Override
@@ -92,7 +104,6 @@ public class MoviePostersFragment extends Fragment {
         View rootView = inflater.inflate(R.layout.video_grid_fragment, container, false);
 
         GridView postersGridView = (GridView)rootView.findViewById(R.id.postersGridView);
-        postersAdapter = new MoviePosterAdapter(getActivity(), Collections.EMPTY_LIST);
         postersGridView.setAdapter(postersAdapter);
 
         return rootView;
@@ -154,6 +165,7 @@ public class MoviePostersFragment extends Fragment {
         @Override
         protected void onPostExecute(List<Movie> movieList) {
             postersAdapter.setMovieList(movieList);
+            storedMovieList = new ArrayList<>(movieList);
             lastLoadedType = currentType;
         }
 
