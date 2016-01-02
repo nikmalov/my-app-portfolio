@@ -183,7 +183,6 @@ public class MoviePostersFragment extends Fragment {
                         parse(movieObject.getString(Movie.RELEASE_DATE), new ParsePosition(0));
                 final Movie movie = new Movie(movieObject.getInt(Movie.MOVIE_ID),
                         movieObject.getString(Movie.TITLE),
-                        movieObject.getString(Movie.THUMBNAILS_PATH),
                         movieObject.getDouble(Movie.USER_RATING),
                         movieObject.getString(Movie.OVERVIEW),
                         releaseDate);

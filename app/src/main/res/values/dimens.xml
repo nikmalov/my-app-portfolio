@@ -6,4 +6,7 @@
 
     <dimen name="app_launch_button_width">180dp</dimen>
     <dimen name="app_launch_button_margin">5dp</dimen>
+
+    <dimen name="inter_label_vertical_padding">8dp</dimen>
+    <dimen name="detailed_view_poster_to_details_padding">32dp</dimen>
 </resources>

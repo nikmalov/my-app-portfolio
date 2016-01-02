@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:paddingLeft="16dp"
+        android:id="@+id/imageView"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        android:paddingRight="16dp"
+        android:paddingTop="4dp"
+        android:src="@mipmap/ic_launcher"
+        android:minHeight="144dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textSize="24sp"
+        android:id="@+id/release_date"
+        android:layout_alignParentTop="true"
+        android:layout_toEndOf="@+id/imageView"
+        android:paddingLeft="@dimen/detailed_view_poster_to_details_padding"
+        android:paddingTop="4dp"
+        android:paddingBottom="@dimen/inter_label_vertical_padding"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="120 min"
+        android:textAppearance="?android:textAppearanceLarge"
+        android:id="@+id/duration"
+        android:layout_below="@+id/release_date"
+        android:layout_alignStart="@+id/release_date"
+        android:paddingLeft="@dimen/detailed_view_poster_to_details_padding"
+        android:paddingBottom="@dimen/inter_label_vertical_padding"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="New Text"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:id="@+id/rating"
+        android:layout_below="@+id/duration"
+        android:layout_alignStart="@+id/duration"
+        android:paddingLeft="@dimen/detailed_view_poster_to_details_padding"
+        android:paddingBottom="@dimen/inter_label_vertical_padding"/>
+
+    <Button
+        android:layout_width="128dp"
+        android:layout_height="wrap_content"
+        android:text="MARK AS FAVOURITE"
+        android:textAppearance="?android:textAppearanceSmall"
+        android:id="@+id/addToFavouriteButton"
+        android:background="@color/detailed_view_secondary"
+        android:layout_below="@+id/rating"
+        android:layout_alignStart="@+id/rating"
+        android:layout_marginLeft="@dimen/detailed_view_poster_to_details_padding"
+        android:lines="2"
+        android:minLines="2"
+        android:singleLine="false" />
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAppearance="?android:textAppearanceMedium"
+        android:text="New Text"
+        android:id="@+id/overview"
+        android:layout_below="@+id/imageView" />
+</RelativeLayout>

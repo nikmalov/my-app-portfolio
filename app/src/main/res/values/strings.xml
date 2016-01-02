@@ -18,5 +18,7 @@
     <string name="sorting_type_key">sorting_type</string>
     <string name="sorting_type_popularity">Popularity</string>
     <string name="sorting_type_top_rated">Rating</string>
+    <string name="mark_favourite">MARK AS FAVOURITE</string>
+    <string name="unmark_favourite">UNMARK</string>
 
 </resources>

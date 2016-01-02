@@ -12,25 +12,21 @@ public class Movie implements Parcelable {
     public static final String MOVIE_ID = "id";
     public static final String TITLE = "original_title";
     public static final String OVERVIEW = "overview";
+    public static final String POSTER = "poster";
     public static final String POSTER_PATH = "poster_path";
-    public static final String THUMBNAILS_PATH = "backdrop_path";
     public static final String USER_RATING = "vote_average";
     public static final String RELEASE_DATE = "release_date";
 
     private int movieId;
     private String title;
-    private String thumbnailsPath;
     private double userRating;
     private String overview;
     private Date releaseDate;
     private Bitmap poster;
 
-    public Movie(int movieId, String title, String thumbnailsPath, double userRating,
-                 String overview, Date releaseDate)
-    {
+    public Movie(int movieId, String title, double userRating, String overview, Date releaseDate) {
         this.movieId = movieId;
         this.title = title;
-        this.thumbnailsPath = thumbnailsPath;
         this.userRating = userRating;
         this.overview = overview;
         this.releaseDate = releaseDate;
@@ -56,10 +52,6 @@ public class Movie implements Parcelable {
         return overview;
     }
 
-    public String getThumbnailsPath() {
-        return thumbnailsPath;
-    }
-
     public double getUserRating() {
         return userRating;
     }
@@ -83,7 +75,6 @@ public class Movie implements Parcelable {
         poster.writeToParcel(dest, 0);
         dest.writeInt(movieId);
         dest.writeString(title);
-        dest.writeString(thumbnailsPath);
         dest.writeDouble(userRating);
         dest.writeString(overview);
         dest.writeLong(releaseDate.getTime());
@@ -94,8 +85,8 @@ public class Movie implements Parcelable {
         public Movie createFromParcel(Parcel source) {
             Bitmap poster = Bitmap.CREATOR.createFromParcel(source);
             Movie newInstance =
-                    new Movie(source.readInt(), source.readString(), source.readString(),
-                            source.readDouble(), source.readString(), new Date(source.readLong()));
+                    new Movie(source.readInt(), source.readString(), source.readDouble(),
+                            source.readString(), new Date(source.readLong()));
             newInstance.setPoster(poster);
             return newInstance;
         }

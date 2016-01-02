@@ -9,4 +9,7 @@
     <string name="title_activity_movie_detail">Подробности</string>
     <string name="title_activity_video_grid">Фильмы</string>
     <string name="action_settings">Настройки</string>
+
+    <string name="mark_favourite">Добавить в избранное</string>
+    <string name="unmark_favourite">Удалить из избранного</string>
 </resources>

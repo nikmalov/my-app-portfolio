@@ -56,7 +56,7 @@ public class MoviePosterAdapter extends BaseAdapter {
 
     private void fillIntentWithMovieData(Intent intent, Movie movie) {
         intent.putExtra(Movie.TITLE, movie.getTitle());
-        intent.putExtra(Movie.THUMBNAILS_PATH, movie.getThumbnailsPath());
+        intent.putExtra(Movie.POSTER, movie.getPoster());
         intent.putExtra(Movie.OVERVIEW, movie.getOverview());
         intent.putExtra(Movie.USER_RATING, movie.getUserRating());
         intent.putExtra(Movie.RELEASE_DATE, movie.getReleaseDate().getTime());
