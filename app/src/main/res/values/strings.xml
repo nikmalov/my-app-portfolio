@@ -21,4 +21,6 @@
     <string name="mark_favourite">MARK AS FAVOURITE</string>
     <string name="unmark_favourite">UNMARK</string>
 
+    <string name="duration_format">%d min</string>
+
 </resources>

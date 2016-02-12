@@ -19,6 +19,7 @@ import android.widget.GridView;
 
 import com.nikmalov.portfolioproject.R;
 import com.squareup.picasso.Picasso;
+import static com.nikmalov.portfolioproject.PopularVideoApp.Utilities.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -41,16 +42,13 @@ public class MoviePostersFragment extends Fragment {
 
     private static final String LOG_TAG = MoviePostersFragment.class.getSimpleName();
     private static final String DATA_STORED = "dataStored";
-    public static final String imageUrlAnchor = "http://image.tmdb.org/t/p/";
-    public static final String imgQuality = "w500/";
 
     private MovieListType currentType;
     private ArrayList<Movie> storedMovieList;
     private MovieListType lastLoadedType;
     private SharedPreferences preference;
     private MoviePosterAdapter postersAdapter;
-    private final String URL_REQUEST_ANCHOR = "http://api.themoviedb.org/3/movie";
-    private final String API_KEY = "?api_key=" + "41320596822de654b82ddb5d040d4127";
+
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -179,18 +177,19 @@ public class MoviePostersFragment extends Fragment {
 
             for (int i = 0; i < movies.length(); i++) {
                 movieObject = movies.getJSONObject(i);
+                String posterPath = movieObject.getString(Movie.POSTER_PATH);
                 Date releaseDate = dateFormat.
                         parse(movieObject.getString(Movie.RELEASE_DATE), new ParsePosition(0));
                 final Movie movie = new Movie(movieObject.getInt(Movie.MOVIE_ID),
                         movieObject.getString(Movie.TITLE),
                         movieObject.getDouble(Movie.USER_RATING),
                         movieObject.getString(Movie.OVERVIEW),
+                        posterPath,
                         releaseDate);
                 //set poster image
                 try {
                     movie.setPoster(Picasso.with(getActivity()).
-                            load(imageUrlAnchor + imgQuality +
-                                    movieObject.getString(Movie.POSTER_PATH)).get());
+                            load(IMAGE_URL_ANCHOR + GRID_IMG_QUALITY + posterPath).get());
                 } catch (IOException e) {
                     Log.e(LOG_TAG, "Was not able to download and set poster.");
                     e.printStackTrace();
