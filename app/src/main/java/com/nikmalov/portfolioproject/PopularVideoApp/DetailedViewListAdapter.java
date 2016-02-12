@@ -117,7 +117,7 @@ public class DetailedViewListAdapter extends BaseAdapter {
                 String[] trailer = ((String[])getItem(position));
                 ((TextView)view.findViewById(R.id.trailerName)).setText(trailer[0]);
                 view.setOnClickListener(
-                        new TrailerOnClickListener(Utilities.getYouTubeLink(trailer[1])));
+                        new OpenUrlOnClickListener(Utilities.getYouTubeLink(trailer[1])));
                 return view;
             }
             case MOVIE_REVIEWS_VIEW_TYPE: {
@@ -125,23 +125,24 @@ public class DetailedViewListAdapter extends BaseAdapter {
                 view = mInflater.inflate(R.layout.detailed_view_review_list_item, parent, false);
                 ((TextView)view.findViewById(R.id.review_author)).setText(review[0]);
                 ((TextView)view.findViewById(R.id.review_text)).setText(review[1]);
+                view.setOnClickListener(new OpenUrlOnClickListener(Uri.parse(review[2])));
                 return view;
             }
         }
         return null;
     }
 
-    class TrailerOnClickListener implements View.OnClickListener {
+    class OpenUrlOnClickListener implements View.OnClickListener {
 
-        private Uri trailerUri;
+        private Uri uriToOpen;
 
-        public TrailerOnClickListener(Uri uri) {
-            trailerUri = uri;
+        public OpenUrlOnClickListener(Uri uri) {
+            uriToOpen = uri;
         }
 
         @Override
         public void onClick(View v) {
-            mContext.startActivity(new Intent(Intent.ACTION_VIEW, trailerUri));
+            mContext.startActivity(new Intent(Intent.ACTION_VIEW, uriToOpen));
         }
     }
 }

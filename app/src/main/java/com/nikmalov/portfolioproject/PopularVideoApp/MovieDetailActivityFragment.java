@@ -291,7 +291,8 @@ public class MovieDetailActivityFragment extends Fragment {
             List<String[]> result = new ArrayList<>();
             for (int i = 0; i < reviewObjects.length(); i++) {
                 review = reviewObjects.getJSONObject(i);
-                result.add(new String[]{review.getString("author"), review.getString("content")});
+                result.add(new String[]{review.getString("author"), review.getString("content"),
+                        review.getString("url")});
             }
             return result;
         }
