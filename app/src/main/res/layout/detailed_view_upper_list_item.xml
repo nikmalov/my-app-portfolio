@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
-                android:paddingLeft="8dp"
-                android:paddingRight="8dp">
+    android:background="@color/white"
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp">
 
     <ImageView
         android:layout_width="wrap_content"
@@ -41,17 +43,16 @@
         android:paddingBottom="@dimen/inter_label_vertical_padding"/>
 
     <TextView
+        android:id="@+id/rating"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="New Text"
         android:textAppearance="?android:textAppearanceSmall"
-        android:id="@+id/rating"
         android:layout_below="@+id/duration"
         android:layout_alignStart="@+id/duration"
         android:paddingLeft="@dimen/detailed_view_poster_to_details_padding"
         android:paddingBottom="@dimen/inter_label_vertical_padding"/>
 
-    <Button
+    <ToggleButton
         android:layout_width="128dp"
         android:layout_height="wrap_content"
         android:text="MARK AS FAVOURITE"

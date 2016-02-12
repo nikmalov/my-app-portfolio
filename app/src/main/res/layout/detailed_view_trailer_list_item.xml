@@ -2,9 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:orientation="horizontal" android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingLeft="32dp"
-    android:paddingTop="8dp"
-    android:paddingBottom="8dp">
+    android:background="@drawable/list_item_background"
+    android:padding="@dimen/detailed_view_page_margin">
 
     <ImageView
         android:layout_width="64dp"
@@ -13,10 +12,9 @@
         android:src="@drawable/icon_play" />
 
     <TextView
+        android:id="@+id/trailerName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Trailer"
         android:textAppearance="?android:textAppearanceMedium"
-        android:id="@+id/trailerName"
         android:layout_gravity="center" />
 </LinearLayout>

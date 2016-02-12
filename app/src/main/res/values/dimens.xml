@@ -9,4 +9,5 @@
 
     <dimen name="inter_label_vertical_padding">8dp</dimen>
     <dimen name="detailed_view_poster_to_details_padding">32dp</dimen>
+    <dimen name="detailed_view_page_margin">8dp</dimen>
 </resources>
