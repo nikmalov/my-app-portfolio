@@ -13,4 +13,5 @@
     <string name="mark_favourite">Добавить в избранное</string>
     <string name="unmark_favourite">Удалить из избранного</string>
     <string name="duration_format">%d минут</string>
+    <string name="moview_poster">Постер фильма</string>
 </resources>

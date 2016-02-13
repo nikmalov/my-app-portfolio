@@ -7,8 +7,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 
 
 import com.nikmalov.portfolioproject.R;
@@ -96,13 +98,26 @@ public class DetailedViewListAdapter extends BaseAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         View view;
-//        view = convertView;
+//        view = convertView; TODO: implement Holder pattern
         switch (getItemViewType(position)) {
             case MOVIE_DETAIL_VIEW_TYPE: {
 //                if (view == null)
-                view = mInflater.inflate(R.layout.detailed_view_upper_list_item, parent, false);
+                view = mInflater.inflate(R.layout.detailed_view_description_list_item, parent, false);
                 ((ImageView)view.findViewById(R.id.detailed_view_poster_image)).
                         setImageBitmap(movie.getPoster());
+                ToggleButton addToFavouritesButton =
+                        ((ToggleButton)view.findViewById(R.id.addToFavouriteButton));
+                addToFavouritesButton.setChecked(isInFavourites(movie));
+                addToFavouritesButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                    @Override
+                    public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                        if (isChecked) {
+                            addToFavourites(movie);
+                        } else {
+                            removeFromFavourites(movie);
+                        }
+                    }
+                });
                 ((TextView)view.findViewById(R.id.release_date)).
                         setText(Utilities.formatDate(movie.getReleaseDate()));
                 ((TextView)view.findViewById(R.id.duration)).setText(mContext.getResources().
@@ -130,6 +145,19 @@ public class DetailedViewListAdapter extends BaseAdapter {
             }
         }
         return null;
+    }
+
+    private void addToFavourites(Movie movie) {
+        //TODO:
+    }
+
+    private void removeFromFavourites(Movie movie) {
+        //TODO:
+    }
+
+    private boolean isInFavourites(Movie movie) {
+        //TODO:
+        return false;
     }
 
     class OpenUrlOnClickListener implements View.OnClickListener {

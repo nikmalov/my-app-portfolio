@@ -22,5 +22,6 @@
     <string name="unmark_favourite">UNMARK</string>
 
     <string name="duration_format">%d min</string>
+    <string name="movie_poster">Movie poster</string>
 
 </resources>
