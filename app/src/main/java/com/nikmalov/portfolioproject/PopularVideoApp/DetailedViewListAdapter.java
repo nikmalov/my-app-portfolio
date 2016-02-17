@@ -1,7 +1,9 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
+import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
+import android.database.Cursor;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +15,7 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 
 
+import com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMoviesContract.FavouriteMovieEntry;
 import com.nikmalov.portfolioproject.R;
 
 import java.util.ArrayList;
@@ -148,16 +151,33 @@ public class DetailedViewListAdapter extends BaseAdapter {
     }
 
     private void addToFavourites(Movie movie) {
-        //TODO:
+        ContentValues movieValues = new ContentValues();
+        movieValues.put(FavouriteMovieEntry.COLUMN_MOVIE_ID, movie.getMovieId());
+        movieValues.put(FavouriteMovieEntry.COLUMN_MOVIE_TITLE, movie.getTitle());
+        movieValues.put(FavouriteMovieEntry.COLUMN_RATING, movie.getUserRating());
+        movieValues.put(FavouriteMovieEntry.COLUMN_RELEASE_DATE, movie.getReleaseDate().getTime());
+        movieValues.put(FavouriteMovieEntry.COLUMN_DURATION, movie.getDuration());
+        movieValues.put(FavouriteMovieEntry.COLUMN_OVERVIEW, movie.getOverview());
+        movieValues.put(FavouriteMovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        mContext.getContentResolver().insert(FavouriteMovieEntry.CONTENT_URI, movieValues);
     }
 
     private void removeFromFavourites(Movie movie) {
-        //TODO:
+        mContext.getContentResolver().delete(
+                FavouriteMovieEntry.buildSingleMovieUri(movie.getMovieId()), null, null);
     }
 
     private boolean isInFavourites(Movie movie) {
-        //TODO:
-        return false;
+        boolean isInFavourites = false;
+        Cursor cursor = mContext.getContentResolver().query(
+                FavouriteMovieEntry.buildSingleMovieUri(movie.getMovieId()),
+                new String[]{FavouriteMovieEntry._ID},
+                null, null, null);
+        if (cursor != null && cursor.moveToFirst())
+            isInFavourites = true;
+        if (cursor != null)
+            cursor.close();
+        return isInFavourites;
     }
 
     class OpenUrlOnClickListener implements View.OnClickListener {
