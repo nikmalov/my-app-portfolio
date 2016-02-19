@@ -72,7 +72,7 @@ public class FavouriteMoviesProvider extends ContentProvider {
         Uri returnUri;
 
         switch (uriMatcher.match(uri)) {
-            case FAVOURITE_MOVIE_BY_ID: {
+            case FAVOURITE_MOVIES: {
                 long _id = db.insert(FavouriteMovieEntry.TABLE_NAME, null, values);
                 if (_id > 0)
                     returnUri = FavouriteMovieEntry.buildSingleMovieUri(_id);
@@ -135,7 +135,7 @@ public class FavouriteMoviesProvider extends ContentProvider {
     static UriMatcher buildUriMatcher() {
         UriMatcher uriMather = new UriMatcher(UriMatcher.NO_MATCH);
         uriMather.addURI(CONTENT_AUTHORITY, PATH_FAVOURITE_MOVIES, FAVOURITE_MOVIES);
-        uriMather.addURI(CONTENT_AUTHORITY, FavouriteMovieEntry.buildSingleMovieUri("*").getPath(), FAVOURITE_MOVIE_BY_ID);
+        uriMather.addURI(CONTENT_AUTHORITY, PATH_FAVOURITE_MOVIES + "/#", FAVOURITE_MOVIE_BY_ID);
         return uriMather;
     }
 }

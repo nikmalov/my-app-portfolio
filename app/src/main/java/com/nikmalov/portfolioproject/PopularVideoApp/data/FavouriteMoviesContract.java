@@ -5,9 +5,6 @@ import android.content.ContentUris;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Created by nikmalov on 13.02.2016.
- */
 public class FavouriteMoviesContract {
 
     public static final String CONTENT_AUTHORITY = "com.nikmalov.portfolioproject.PopularVideoApp";
@@ -38,23 +35,11 @@ public class FavouriteMoviesContract {
                 CONTENT_AUTHORITY + "/" + PATH_FAVOURITE_MOVIES;
 
         public static Uri buildSingleMovieUri(long movieId) {
-            return CONTENT_URI.buildUpon().
-                    appendQueryParameter(COLUMN_MOVIE_ID, String.valueOf(movieId)).build();
+            return ContentUris.withAppendedId(CONTENT_URI, movieId);
         }
-
-        public static Uri buildSingleMovieUri(String movieId) {
-            return CONTENT_URI.buildUpon().appendQueryParameter(COLUMN_MOVIE_ID, movieId).build();
-        }
-
-
-//        public static Uri buildSingleMovieUri(long id) {
-//            return ContentUris.withAppendedId(CONTENT_URI, id);
-//        }
 
         public static String getMovieIdStringFromUri(Uri uri) {
-            return uri.getQueryParameter(COLUMN_MOVIE_ID);
+            return String.valueOf(ContentUris.parseId(uri));
         }
-
     }
-
 }

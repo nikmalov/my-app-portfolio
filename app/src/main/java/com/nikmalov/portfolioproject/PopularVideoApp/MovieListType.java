@@ -3,7 +3,8 @@ package com.nikmalov.portfolioproject.PopularVideoApp;
 public enum MovieListType {
 
     POPULAR("/popular"),
-    TOP_RATED("/top_rated");
+    TOP_RATED("/top_rated"),
+    FAVOURITES("");//stored locally
 
     String urlPostfix;
 

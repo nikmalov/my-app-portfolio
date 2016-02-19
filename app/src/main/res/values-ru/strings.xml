@@ -6,6 +6,7 @@
     <string name="sorting_type">Упорядочить по</string>
     <string name="sorting_type_popularity">Популярности</string>
     <string name="sorting_type_top_rated">Оценкам</string>
+    <string name="sorting_type_favourites">Избранное</string>
     <string name="title_activity_movie_detail">Подробности</string>
     <string name="title_activity_video_grid">Фильмы</string>
     <string name="action_settings">Настройки</string>

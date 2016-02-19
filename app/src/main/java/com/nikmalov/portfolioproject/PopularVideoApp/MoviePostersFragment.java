@@ -3,6 +3,8 @@ package com.nikmalov.portfolioproject.PopularVideoApp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.database.ContentObserver;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -20,6 +22,7 @@ import android.widget.GridView;
 import com.nikmalov.portfolioproject.R;
 import com.squareup.picasso.Picasso;
 import static com.nikmalov.portfolioproject.PopularVideoApp.Utilities.*;
+import static com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMoviesContract.FavouriteMovieEntry.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -48,6 +51,7 @@ public class MoviePostersFragment extends Fragment {
     private MovieListType lastLoadedType;
     private SharedPreferences preference;
     private MoviePosterAdapter postersAdapter;
+    private ContentObserver favouriteMoviesObserver;//TODO: implement movieList updating on content change
 
 
     @Override
@@ -110,8 +114,13 @@ public class MoviePostersFragment extends Fragment {
     private MovieListType getCurrentSortingType() {
         String sortingTypeString = preference.getString(getString(R.string.sorting_type_key),
                 getString((R.string.sorting_type_popularity)));
-        return getString((R.string.sorting_type_top_rated)).equalsIgnoreCase(sortingTypeString) ?
-                MovieListType.TOP_RATED : MovieListType.POPULAR;
+        if (sortingTypeString.equalsIgnoreCase(getString(R.string.sorting_type_top_rated))) {
+            return MovieListType.TOP_RATED;
+        } else if (sortingTypeString.equalsIgnoreCase(getString(R.string.sorting_type_popularity))) {
+            return MovieListType.POPULAR;
+        } else {
+            return MovieListType.FAVOURITES;
+        }
     }
 
     private class MovieGetterAsyncTask extends AsyncTask<MovieListType, Void, List<Movie>> {
@@ -120,10 +129,28 @@ public class MoviePostersFragment extends Fragment {
         protected List<Movie> doInBackground(MovieListType... params) {
             if (params[0] == null)
                 return null;
+            List<Movie> movieList = new ArrayList<>();
+            if (params[0] == MovieListType.FAVOURITES) {//short way, favourites stored locally
+                Cursor cur = getActivity().getContentResolver().query(
+                        CONTENT_URI, null, null, null, null);
+                try {
+                    if (cur != null && cur.moveToFirst()) {
+                        movieList.add(createMovie(getActivity(), cur));
+                        while (cur.moveToNext()) {
+                            movieList.add(createMovie(getActivity(), cur));
+                        }
+                    }
+                } catch (IOException e) {
+                    Log.e(getClass().getSimpleName(), e.getMessage());
+                } finally {
+                    if (cur != null)
+                        cur.close();
+                }
+                return movieList;
+            }
             HttpURLConnection urlConnection;
             BufferedReader reader;
             String jsonResult;
-            List<Movie> movieList = new ArrayList<>();
 
             try {
                 URL url = new URL(URL_REQUEST_ANCHOR + params[0].urlPostfix + API_KEY);
