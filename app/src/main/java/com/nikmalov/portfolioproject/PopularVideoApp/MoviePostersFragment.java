@@ -3,7 +3,6 @@ package com.nikmalov.portfolioproject.PopularVideoApp;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.ContentObserver;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -51,8 +50,6 @@ public class MoviePostersFragment extends Fragment {
     private MovieListType lastLoadedType;
     private SharedPreferences preference;
     private MoviePosterAdapter postersAdapter;
-    private ContentObserver favouriteMoviesObserver;//TODO: implement movieList updating on content change
-
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -79,8 +76,11 @@ public class MoviePostersFragment extends Fragment {
     public void onStart() {
         super.onStart();
         currentType = getCurrentSortingType();
-        if (currentType != lastLoadedType)
+        if (currentType != lastLoadedType) {
             new MovieGetterAsyncTask().execute(currentType);
+        } else if (currentType == MovieListType.FAVOURITES) {
+            refreshDisplayedFavourites();
+        }
     }
 
     @Override
@@ -121,6 +121,37 @@ public class MoviePostersFragment extends Fragment {
         } else {
             return MovieListType.FAVOURITES;
         }
+    }
+
+    /**
+     * Optimisation for the case when we remove a movie from favourites and return to grid
+     * of favourites, so that we don't need to query all posters once again.
+     */
+    private void refreshDisplayedFavourites() {
+        List<Integer> currentIdList = new ArrayList<>(storedMovieList.size());
+        Cursor cur = getActivity().getContentResolver().query(CONTENT_URI, null, null, null, null);
+        if (cur != null && cur.moveToFirst()) {
+            currentIdList.add(cur.getInt(cur.getColumnIndex(COLUMN_MOVIE_ID)));
+            while (cur.moveToNext()) {
+                currentIdList.add(cur.getInt(cur.getColumnIndex(COLUMN_MOVIE_ID)));
+            }
+        }
+        if (cur != null)
+            cur.close();
+        storedMovieList = removeUnfavouritedMovies(currentIdList);
+        postersAdapter.setMovieList(storedMovieList);
+    }
+
+    /**
+     * Removes movie which are not in favourites anymore from list of currently displayed ones.
+     */
+    private ArrayList<Movie> removeUnfavouritedMovies(List<Integer> moviesIdList) {
+        ArrayList<Movie> refreshedMovieList = new ArrayList<>(moviesIdList.size());
+        for (Movie movie : storedMovieList) {
+            if (moviesIdList.contains(movie.getMovieId()))
+                refreshedMovieList.add(movie);
+        }
+        return refreshedMovieList;
     }
 
     private class MovieGetterAsyncTask extends AsyncTask<MovieListType, Void, List<Movie>> {

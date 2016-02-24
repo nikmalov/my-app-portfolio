@@ -177,7 +177,9 @@ public class DetailedViewListAdapter extends BaseAdapter {
 
     private void removeFromFavourites(Movie movie) {
         mContext.getContentResolver().delete(
-                FavouriteMovieEntry.buildSingleMovieUri(movie.getMovieId()), null, null);
+                FavouriteMovieEntry.buildSingleMovieUri(movie.getMovieId()),
+                FavouriteMovieEntry.COLUMN_MOVIE_ID + " = ? ",
+                new String[]{String.valueOf(movie.getMovieId())});
     }
 
     private boolean isInFavourites(Movie movie) {

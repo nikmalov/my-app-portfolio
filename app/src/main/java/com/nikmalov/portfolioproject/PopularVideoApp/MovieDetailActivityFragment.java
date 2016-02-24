@@ -278,7 +278,7 @@ public class MovieDetailActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String[]> reviews) {
             mAdapter.setReviews(reviews);
-            mListView.setAdapter(mAdapter);//TODO: instead of resetting adapter in every postExecute implement cyclicBarrier
+            mListView.setAdapter(mAdapter);
             Log.i(getClass().getSimpleName(), "Finished loading movie reviews.");
         }
 
