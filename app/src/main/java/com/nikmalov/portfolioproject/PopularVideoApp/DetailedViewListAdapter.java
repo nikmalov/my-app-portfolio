@@ -100,18 +100,20 @@ public class DetailedViewListAdapter extends BaseAdapter {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-        View view;
-//        view = convertView; TODO: implement Holder pattern
+        View view = convertView;
         switch (getItemViewType(position)) {
             case MOVIE_DETAIL_VIEW_TYPE: {
-//                if (view == null)
-                view = mInflater.inflate(R.layout.detailed_view_description_list_item, parent, false);
-                ((ImageView)view.findViewById(R.id.detailed_view_poster_image)).
-                        setImageBitmap(movie.getPoster());
-                ToggleButton addToFavouritesButton =
-                        ((ToggleButton)view.findViewById(R.id.addToFavouriteButton));
-                addToFavouritesButton.setChecked(isInFavourites(movie));
-                addToFavouritesButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+                MovieDetailsHolder detailsHolder;
+                if (view == null) {
+                    view = mInflater.inflate(R.layout.detailed_view_description_list_item, parent, false);
+                    detailsHolder = new MovieDetailsHolder(view);
+                    view.setTag(detailsHolder);
+                } else {
+                    detailsHolder = (MovieDetailsHolder)view.getTag();
+                }
+                detailsHolder.poster.setImageBitmap(movie.getPoster());
+                detailsHolder.addToFavouritesButton.setChecked(isInFavourites(movie));
+                detailsHolder.addToFavouritesButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                         if (isChecked) {
@@ -121,28 +123,39 @@ public class DetailedViewListAdapter extends BaseAdapter {
                         }
                     }
                 });
-                ((TextView)view.findViewById(R.id.release_date)).
-                        setText(Utilities.formatDate(movie.getReleaseDate()));
-                ((TextView)view.findViewById(R.id.duration)).setText(mContext.getResources().
-                        getString(R.string.duration_format, movie.getDuration()));
-                ((TextView)view.findViewById(R.id.rating)).
-                        setText(Utilities.formatRating(movie.getUserRating()));
-                ((TextView)view.findViewById(R.id.overview)).setText(movie.getOverview());
+                detailsHolder.releaseDate.setText(Utilities.formatDate(movie.getReleaseDate()));
+                detailsHolder.duration.setText(mContext.getResources().getString(R.string.duration_format, movie.getDuration()));
+                detailsHolder.rating.setText(Utilities.formatRating(movie.getUserRating()));
+                detailsHolder.overview.setText(movie.getOverview());
                 return view;
             }
             case MOVIE_TRAILERS_VIEW_TYPE: {
-                view = mInflater.inflate(R.layout.detailed_view_trailer_list_item, parent, false);
+                TrailerHolder trailerHolder;
+                if (view == null) {
+                    view = mInflater.inflate(R.layout.detailed_view_trailer_list_item, parent, false);
+                    trailerHolder = new TrailerHolder(view);
+                    view.setTag(trailerHolder);
+                } else {
+                    trailerHolder = (TrailerHolder)view.getTag();
+                }
                 String[] trailer = ((String[])getItem(position));
-                ((TextView)view.findViewById(R.id.trailerName)).setText(trailer[0]);
+                trailerHolder.trailerName.setText(trailer[0]);
                 view.setOnClickListener(
                         new OpenUrlOnClickListener(Utilities.getYouTubeLink(trailer[1])));
                 return view;
             }
             case MOVIE_REVIEWS_VIEW_TYPE: {
+                ReviewHolder reviewHolder;
+                if (view == null) {
+                    view = mInflater.inflate(R.layout.detailed_view_review_list_item, parent, false);
+                    reviewHolder = new ReviewHolder(view);
+                    view.setTag(reviewHolder);
+                } else {
+                    reviewHolder = (ReviewHolder)view.getTag();
+                }
                 String[] review = (String[])getItem(position);
-                view = mInflater.inflate(R.layout.detailed_view_review_list_item, parent, false);
-                ((TextView)view.findViewById(R.id.review_author)).setText(review[0]);
-                ((TextView)view.findViewById(R.id.review_text)).setText(review[1]);
+                reviewHolder.author.setText(review[0]);
+                reviewHolder.review.setText(review[1]);
                 view.setOnClickListener(new OpenUrlOnClickListener(Uri.parse(review[2])));
                 return view;
             }
@@ -191,6 +204,46 @@ public class DetailedViewListAdapter extends BaseAdapter {
         @Override
         public void onClick(View v) {
             mContext.startActivity(new Intent(Intent.ACTION_VIEW, uriToOpen));
+        }
+    }
+
+    //----Holders----
+
+    class MovieDetailsHolder {
+
+        public final ImageView poster;
+        public final ToggleButton addToFavouritesButton;
+        public final TextView releaseDate;
+        public final TextView duration;
+        public final TextView rating;
+        public final TextView overview;
+
+        public MovieDetailsHolder(View parentView) {
+            poster = ((ImageView)parentView.findViewById(R.id.detailed_view_poster_image));
+            addToFavouritesButton = ((ToggleButton)parentView.findViewById(R.id.addToFavouriteButton));
+            releaseDate = ((TextView)parentView.findViewById(R.id.release_date));
+            duration = ((TextView)parentView.findViewById(R.id.duration));
+            rating = ((TextView)parentView.findViewById(R.id.rating));
+            overview = ((TextView)parentView.findViewById(R.id.overview));
+        }
+    }
+
+    class TrailerHolder {
+        public final TextView trailerName;
+
+        public TrailerHolder(View parentView) {
+            trailerName = ((TextView)parentView.findViewById(R.id.trailerName));
+        }
+    }
+
+    class ReviewHolder {
+        public final TextView author;
+        public final TextView review;
+
+        public ReviewHolder(View parentView) {
+            author = ((TextView)parentView.findViewById(R.id.review_author));
+            review = ((TextView)parentView.findViewById(R.id.review_text));
+
         }
     }
 }
