@@ -7,7 +7,7 @@ import static com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMovies
 
 public class FavouriteMoviesDBHelper extends SQLiteOpenHelper {
 
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
     static final String DATABASE_NAME = "favourite_movies.db";
 
     public FavouriteMoviesDBHelper(Context context) {
@@ -25,7 +25,8 @@ public class FavouriteMoviesDBHelper extends SQLiteOpenHelper {
                 COLUMN_RELEASE_DATE + " INTEGER NOT NULL, " +
                 COLUMN_DURATION + " INTEGER NOT NULL, " +
                 COLUMN_OVERVIEW + " TEXT NOT NULL, " +
-                COLUMN_POSTER_PATH + " TEXT NOT NULL" +
+                COLUMN_POSTER_PATH + " TEXT NOT NULL, " +
+                COLUMN_POSTER + " BLOB NOT NULL" +
                 ");";
         db.execSQL(SQL_CREATE_LOCATION_TABLE);
     }

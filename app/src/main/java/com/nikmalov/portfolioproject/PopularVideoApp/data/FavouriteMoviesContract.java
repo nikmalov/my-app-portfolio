@@ -23,6 +23,7 @@ public class FavouriteMoviesContract {
         public static final String COLUMN_DURATION = "duration";
         public static final String COLUMN_OVERVIEW = "overview";
         public static final String COLUMN_POSTER_PATH = "poster_path";
+        public static final String COLUMN_POSTER = "poster";
 
 
         public static final Uri CONTENT_URI =

@@ -1,12 +1,9 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.database.Cursor;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,7 +16,6 @@ import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.nikmalov.portfolioproject.R;
-import com.squareup.picasso.Picasso;
 import static com.nikmalov.portfolioproject.PopularVideoApp.Utilities.*;
 import static com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMoviesContract.FavouriteMovieEntry.*;
 
@@ -33,11 +29,8 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 public class MoviePostersFragment extends Fragment {
@@ -48,15 +41,13 @@ public class MoviePostersFragment extends Fragment {
     private MovieListType currentType;
     private ArrayList<Movie> storedMovieList;
     private MovieListType lastLoadedType;
-    private SharedPreferences preference;
     private MoviePosterAdapter postersAdapter;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
-        preference = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        currentType = getCurrentSortingType();
+        currentType = getCurrentSortingType(getActivity());
         if (savedInstanceState == null || savedInstanceState.isEmpty()) {
             postersAdapter = new MoviePosterAdapter(getActivity(), Collections.EMPTY_LIST);
             new MovieGetterAsyncTask().execute(currentType);
@@ -75,7 +66,7 @@ public class MoviePostersFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        currentType = getCurrentSortingType();
+        currentType = getCurrentSortingType(getActivity());
         if (currentType != lastLoadedType) {
             new MovieGetterAsyncTask().execute(currentType);
         } else if (currentType == MovieListType.FAVOURITES) {
@@ -109,18 +100,6 @@ public class MoviePostersFragment extends Fragment {
         postersGridView.setAdapter(postersAdapter);
 
         return rootView;
-    }
-
-    private MovieListType getCurrentSortingType() {
-        String sortingTypeString = preference.getString(getString(R.string.sorting_type_key),
-                getString((R.string.sorting_type_popularity)));
-        if (sortingTypeString.equalsIgnoreCase(getString(R.string.sorting_type_top_rated))) {
-            return MovieListType.TOP_RATED;
-        } else if (sortingTypeString.equalsIgnoreCase(getString(R.string.sorting_type_popularity))) {
-            return MovieListType.POPULAR;
-        } else {
-            return MovieListType.FAVOURITES;
-        }
     }
 
     /**
@@ -164,18 +143,14 @@ public class MoviePostersFragment extends Fragment {
             if (params[0] == MovieListType.FAVOURITES) {//short way, favourites stored locally
                 Cursor cur = getActivity().getContentResolver().query(
                         CONTENT_URI, null, null, null, null);
-                try {
-                    if (cur != null && cur.moveToFirst()) {
-                        movieList.add(createMovie(getActivity(), cur));
+                if (cur != null) {
+                    if (cur.moveToFirst()) {
+                        movieList.add(createMovie(cur));
                         while (cur.moveToNext()) {
-                            movieList.add(createMovie(getActivity(), cur));
+                            movieList.add(createMovie(cur));
                         }
                     }
-                } catch (IOException e) {
-                    Log.e(getClass().getSimpleName(), e.getMessage());
-                } finally {
-                    if (cur != null)
-                        cur.close();
+                    cur.close();
                 }
                 return movieList;
             }
@@ -227,32 +202,11 @@ public class MoviePostersFragment extends Fragment {
 
         private List<Movie> parseJsonMovieInfo(String jsonInput) throws JSONException {
             JSONObject rawData = new JSONObject(jsonInput);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             JSONArray movies = rawData.getJSONArray("results");
             List<Movie> result = new ArrayList<>();
-            JSONObject movieObject;
 
             for (int i = 0; i < movies.length(); i++) {
-                movieObject = movies.getJSONObject(i);
-                String posterPath = movieObject.getString(Movie.POSTER_PATH);
-                Date releaseDate = dateFormat.
-                        parse(movieObject.getString(Movie.RELEASE_DATE), new ParsePosition(0));
-                final Movie movie = new Movie(movieObject.getInt(Movie.MOVIE_ID),
-                        movieObject.getString(Movie.TITLE),
-                        movieObject.getDouble(Movie.USER_RATING),
-                        movieObject.getString(Movie.OVERVIEW),
-                        posterPath,
-                        releaseDate);
-                //set poster image
-                try {
-                    movie.setPoster(Picasso.with(getActivity()).
-                            load(IMAGE_URL_ANCHOR + GRID_IMG_QUALITY + posterPath).get());
-                } catch (IOException e) {
-                    Log.e(LOG_TAG, "Was not able to download and set poster.");
-                    e.printStackTrace();
-                }
-                result.add(movie);
+                result.add(createMovieOnline(getActivity(), movies.getJSONObject(i)));
             }
             return result;
         }

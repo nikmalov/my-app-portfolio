@@ -4,6 +4,7 @@ import android.content.ContentValues;
 import android.content.Context;
 import android.content.Intent;
 import android.database.Cursor;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -18,6 +19,7 @@ import android.widget.ToggleButton;
 import com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMoviesContract.FavouriteMovieEntry;
 import com.nikmalov.portfolioproject.R;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,8 +30,8 @@ public class DetailedViewListAdapter extends BaseAdapter {
     private static final int MOVIE_REVIEWS_VIEW_TYPE = 2;
 
     Movie movie;
-    List<String[]> trailersList = new ArrayList<>();
-    List<String[]> reviews = new ArrayList<>();
+    List<String[]> trailersList = new ArrayList<>(0);
+    List<String[]> reviews = new ArrayList<>(0);
     Context mContext;
     LayoutInflater mInflater;
 
@@ -172,7 +174,14 @@ public class DetailedViewListAdapter extends BaseAdapter {
         movieValues.put(FavouriteMovieEntry.COLUMN_DURATION, movie.getDuration());
         movieValues.put(FavouriteMovieEntry.COLUMN_OVERVIEW, movie.getOverview());
         movieValues.put(FavouriteMovieEntry.COLUMN_POSTER_PATH, movie.getPosterPath());
+        movieValues.put(FavouriteMovieEntry.COLUMN_POSTER, getPosterAsByteArray(movie.getPoster()));
         mContext.getContentResolver().insert(FavouriteMovieEntry.CONTENT_URI, movieValues);
+    }
+
+    private byte[] getPosterAsByteArray(Bitmap poster) {
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        poster.compress(Bitmap.CompressFormat.PNG, 0, outputStream);
+        return outputStream.toByteArray();
     }
 
     private void removeFromFavourites(Movie movie) {

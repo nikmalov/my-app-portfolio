@@ -1,7 +1,7 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
-import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -13,8 +13,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 
 import com.nikmalov.portfolioproject.R;
-import com.squareup.picasso.Picasso;
 import static com.nikmalov.portfolioproject.PopularVideoApp.Utilities.*;
+import static com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMoviesContract.FavouriteMovieEntry.buildSingleMovieUri;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -26,8 +26,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
@@ -80,11 +78,23 @@ public class MovieDetailActivityFragment extends Fragment {
             if (params.length == 0)
                 return null;
             int movieId = params[0];
+            Movie movie = null;
+            if (Utilities.getCurrentSortingType(getActivity()) == MovieListType.FAVOURITES) {
+                Cursor cur = getActivity().getContentResolver().query(buildSingleMovieUri(movieId),
+                        null, null, null, null);
+                if (cur != null) {
+                    if (cur.moveToFirst())
+                        movie = createMovie(cur);
+                    cur.close();
+                }
+                if (movie != null)
+                    return movie;
+
+            }
 
             HttpURLConnection urlConnection;
             BufferedReader reader;
             String jsonResult;
-            Movie movie = null;
 
             try {
                 URL url = new URL(URL_REQUEST_ANCHOR + "/" + movieId + API_KEY);
@@ -124,33 +134,17 @@ public class MovieDetailActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Movie movie) {
-            mAdapter.setMovie(movie);
-            mListView.setAdapter(mAdapter);
+            if (movie != null) {
+                mAdapter.setMovie(movie);
+                mListView.setAdapter(mAdapter);
+            }
             Log.i(getClass().getSimpleName(), "Finished loading movie details.");
         }
 
         private Movie parseJsonMovieDetails(String jsonInput) throws JSONException {
             JSONObject movieObject = new JSONObject(jsonInput);
-            @SuppressLint("SimpleDateFormat")
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
-            String posterPath = movieObject.getString(Movie.POSTER_PATH);
-            Date releaseDate = dateFormat.
-                    parse(movieObject.getString(Movie.RELEASE_DATE), new ParsePosition(0));
-            final Movie movie = new Movie(movieObject.getInt(Movie.MOVIE_ID),
-                    movieObject.getString(Movie.TITLE),
-                    movieObject.getDouble(Movie.USER_RATING),
-                    movieObject.getString(Movie.OVERVIEW),
-                    posterPath,
-                    releaseDate);
+            Movie movie = createMovieOnline(getActivity(), movieObject);
             movie.setDuration(movieObject.getInt(Movie.DURATION));
-            //set poster image
-            try {
-                movie.setPoster(Picasso.with(getActivity()).
-                        load(IMAGE_URL_ANCHOR + DETAILED_IMG_QUALITY + posterPath).get());
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
             return movie;
         }
     }
@@ -206,8 +200,10 @@ public class MovieDetailActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String[]> trailers) {
-            mAdapter.setTrailersList(trailers);
-            mListView.setAdapter(mAdapter);
+            if (trailers != null) {
+                mAdapter.setTrailersList(trailers);
+                mListView.setAdapter(mAdapter);
+            }
             Log.i(getClass().getSimpleName(), "Finished loading movie trailers.");
         }
 
@@ -277,8 +273,10 @@ public class MovieDetailActivityFragment extends Fragment {
 
         @Override
         protected void onPostExecute(List<String[]> reviews) {
-            mAdapter.setReviews(reviews);
-            mListView.setAdapter(mAdapter);
+            if (reviews != null) {
+                mAdapter.setReviews(reviews);
+                mListView.setAdapter(mAdapter);
+            }
             Log.i(getClass().getSimpleName(), "Finished loading movie reviews.");
         }
 
