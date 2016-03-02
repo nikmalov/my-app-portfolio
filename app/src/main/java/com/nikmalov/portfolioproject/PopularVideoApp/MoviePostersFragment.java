@@ -13,6 +13,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.GridView;
 
 import com.nikmalov.portfolioproject.R;
@@ -98,6 +99,12 @@ public class MoviePostersFragment extends Fragment {
 
         GridView postersGridView = (GridView)rootView.findViewById(R.id.postersGridView);
         postersGridView.setAdapter(postersAdapter);
+        postersGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                ((VideoGridActivity)getActivity()).onMovieSelected((Movie)parent.getAdapter().getItem(position));
+            }
+        });
 
         return rootView;
     }
@@ -210,5 +217,9 @@ public class MoviePostersFragment extends Fragment {
             }
             return result;
         }
+    }
+
+    public interface MovieSelectedCallback {
+        void onMovieSelected(Movie movie);
     }
 }

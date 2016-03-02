@@ -1,0 +1,24 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+              xmlns:tools="http://schemas.android.com/tools"
+              android:layout_width="match_parent"
+              android:layout_height="match_parent"
+              android:background="@color/black"
+              android:baselineAligned="false"
+              android:divider="?android:attr/dividerHorizontal"
+              android:orientation="horizontal">
+
+    <fragment
+        android:id="@+id/video_grid_fragment"
+        android:name="com.nikmalov.portfolioproject.PopularVideoApp.MoviePostersFragment"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1"
+        tools:layout="@android:layout/list_content" />
+
+    <FrameLayout
+        android:id="@+id/movie_details_container"
+        android:layout_width="0dp"
+        android:layout_height="match_parent"
+        android:layout_weight="1" />
+
+</LinearLayout>

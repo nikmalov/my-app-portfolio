@@ -1,7 +1,6 @@
 package com.nikmalov.portfolioproject.PopularVideoApp;
 
 import android.content.Context;
-import android.content.Intent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -30,8 +29,8 @@ public class MoviePosterAdapter extends BaseAdapter {
     }
 
     @Override
-    public Object getItem(int position) {
-        return null;
+    public Movie getItem(int position) {
+        return movieList.get(position);
     }
 
     @Override
@@ -42,25 +41,7 @@ public class MoviePosterAdapter extends BaseAdapter {
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
         ImageView imageView = new ImageView(mContext);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent movieDetailsIntent = new Intent(mContext, MovieDetailActivity.class);
-                fillIntentWithMovieData(movieDetailsIntent, movieList.get(position));
-                mContext.startActivity(movieDetailsIntent);
-            }
-        });
         imageView.setImageBitmap(movieList.get(position).getPoster());
         return imageView;
     }
-
-    private void fillIntentWithMovieData(Intent intent, Movie movie) {
-        intent.putExtra(Movie.MOVIE_ID, movie.getMovieId());
-        intent.putExtra(Movie.TITLE, movie.getTitle());
-        intent.putExtra(Movie.POSTER_PATH, movie.getPosterPath());
-        intent.putExtra(Movie.OVERVIEW, movie.getOverview());
-        intent.putExtra(Movie.USER_RATING, movie.getUserRating());
-        intent.putExtra(Movie.RELEASE_DATE, movie.getReleaseDate().getTime());
-    }
-
 }

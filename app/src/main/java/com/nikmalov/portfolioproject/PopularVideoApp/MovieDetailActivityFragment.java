@@ -35,6 +35,7 @@ import java.util.List;
  */
 public class MovieDetailActivityFragment extends Fragment {
 
+    private Movie movie;
     private List<String[]> trailers = new ArrayList<>();
     private List<String[]> reviews = new ArrayList<>();
     DetailedViewListAdapter mAdapter;
@@ -46,7 +47,17 @@ public class MovieDetailActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        int movieId = getActivity().getIntent().getIntExtra(Movie.MOVIE_ID, 0);
+        Bundle args = getArguments();
+        if (args != null && args.getParcelable(Movie.MOVIE) != null) {
+            movie = args.getParcelable(Movie.MOVIE);
+        } else {
+            Intent intent = getActivity().getIntent();
+            movie = new Movie(intent.getIntExtra(Movie.MOVIE_ID, 0),
+                    intent.getStringExtra(Movie.TITLE), intent.getDoubleExtra(Movie.USER_RATING, 0),
+                    intent.getStringExtra(Movie.OVERVIEW), intent.getStringExtra(Movie.POSTER_PATH),
+                    new Date(intent.getLongExtra(Movie.RELEASE_DATE, 0)));
+        }
+        int movieId = movie.getMovieId();
         if (movieId != 0) {
             new MovieDetailsAsyncTask().execute(movieId);
             new MovieTrailersAsyncTask().execute(movieId);
@@ -59,14 +70,8 @@ public class MovieDetailActivityFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.movie_detail_fragment, container, false);
-        Intent intent = getActivity().getIntent();
-        String movieTitle = intent.getStringExtra(Movie.TITLE);
-        ((TextView)rootView.findViewById(R.id.detailed_movie_header)).setText(movieTitle);
         mListView = (ListView)rootView.findViewById(R.id.detailed_movie_list_view);
-        Movie movie = new Movie(intent.getIntExtra(Movie.MOVIE_ID, 0),
-                movieTitle, intent.getDoubleExtra(Movie.USER_RATING, 0),
-                intent.getStringExtra(Movie.OVERVIEW), intent.getStringExtra(Movie.POSTER_PATH),
-                new Date(intent.getLongExtra(Movie.RELEASE_DATE, 0)));
+        ((TextView) rootView.findViewById(R.id.detailed_movie_header)).setText(movie.getTitle());
         mAdapter = new DetailedViewListAdapter(getActivity(), movie, trailers, reviews);
         return rootView;
     }

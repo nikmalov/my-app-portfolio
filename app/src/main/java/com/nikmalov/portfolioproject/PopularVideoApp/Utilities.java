@@ -2,6 +2,7 @@ package com.nikmalov.portfolioproject.PopularVideoApp;
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -100,6 +101,15 @@ public class Utilities {
         } else {
             return MovieListType.FAVOURITES;
         }
+    }
+
+    public static void fillIntentWithMovieData(Intent intent, Movie movie) {
+        intent.putExtra(Movie.MOVIE_ID, movie.getMovieId());
+        intent.putExtra(Movie.TITLE, movie.getTitle());
+        intent.putExtra(Movie.POSTER_PATH, movie.getPosterPath());
+        intent.putExtra(Movie.OVERVIEW, movie.getOverview());
+        intent.putExtra(Movie.USER_RATING, movie.getUserRating());
+        intent.putExtra(Movie.RELEASE_DATE, movie.getReleaseDate().getTime());
     }
 
 }
