@@ -40,7 +40,9 @@ public class MoviePosterAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int position, View convertView, ViewGroup parent) {
-        ImageView imageView = new ImageView(mContext);
+        ImageView imageView = (ImageView)convertView;
+        if (imageView == null)
+            imageView = new ImageView(mContext);
         imageView.setImageBitmap(movieList.get(position).getPoster());
         return imageView;
     }
