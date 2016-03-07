@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<fragment xmlns:android="http://schemas.android.com/apk/res/android"
              android:id="@+id/video_grid_activity"
-             android:background="@color/black"
+             android:name="com.nikmalov.portfolioproject.PopularVideoApp.MoviePostersFragment"
              android:layout_width="match_parent"
              android:layout_height="match_parent">
-
-</FrameLayout>
+</fragment>
