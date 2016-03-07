@@ -23,6 +23,9 @@ import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class DetailedViewListAdapter extends BaseAdapter {
 
     private static final int MOVIE_DETAIL_VIEW_TYPE = 0;
@@ -221,40 +224,32 @@ public class DetailedViewListAdapter extends BaseAdapter {
     //----Holders----
 
     class MovieDetailsHolder {
-
-        public final ImageView poster;
-        public final ToggleButton addToFavouritesButton;
-        public final TextView releaseDate;
-        public final TextView duration;
-        public final TextView rating;
-        public final TextView overview;
+        @Bind(R.id.detailed_view_poster_image) ImageView poster;
+        @Bind(R.id.addToFavouriteButton) ToggleButton addToFavouritesButton;
+        @Bind(R.id.release_date) TextView releaseDate;
+        @Bind(R.id.duration) TextView duration;
+        @Bind(R.id.rating) TextView rating;
+        @Bind(R.id.overview) TextView overview;
 
         public MovieDetailsHolder(View parentView) {
-            poster = ((ImageView)parentView.findViewById(R.id.detailed_view_poster_image));
-            addToFavouritesButton = ((ToggleButton)parentView.findViewById(R.id.addToFavouriteButton));
-            releaseDate = ((TextView)parentView.findViewById(R.id.release_date));
-            duration = ((TextView)parentView.findViewById(R.id.duration));
-            rating = ((TextView)parentView.findViewById(R.id.rating));
-            overview = ((TextView)parentView.findViewById(R.id.overview));
+            ButterKnife.bind(this, parentView);
         }
     }
 
     class TrailerHolder {
-        public final TextView trailerName;
+        @Bind(R.id.trailerName) TextView trailerName;
 
         public TrailerHolder(View parentView) {
-            trailerName = ((TextView)parentView.findViewById(R.id.trailerName));
+            ButterKnife.bind(this, parentView);
         }
     }
 
     class ReviewHolder {
-        public final TextView author;
-        public final TextView review;
+        @Bind(R.id.review_author) TextView author;
+        @Bind(R.id.review_text) TextView review;
 
         public ReviewHolder(View parentView) {
-            author = ((TextView)parentView.findViewById(R.id.review_author));
-            review = ((TextView)parentView.findViewById(R.id.review_text));
-
+            ButterKnife.bind(this, parentView);
         }
     }
 }
