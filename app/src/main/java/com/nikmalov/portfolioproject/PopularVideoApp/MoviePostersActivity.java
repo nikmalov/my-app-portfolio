@@ -6,7 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.nikmalov.portfolioproject.R;
 
-public class VideoGridActivity extends AppCompatActivity
+public class MoviePostersActivity extends AppCompatActivity
         implements MoviePostersFragment.MovieSelectedCallback {
 
     private static final String MOVIE_DETAILS_FRAGMENT_TAG = "MOVIE_DETAILS_TAG";

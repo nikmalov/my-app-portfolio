@@ -102,7 +102,7 @@ public class MoviePostersFragment extends Fragment {
         postersGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                ((VideoGridActivity)getActivity()).onMovieSelected((Movie)parent.getAdapter().getItem(position));
+                ((MoviePostersActivity)getActivity()).onMovieSelected((Movie)parent.getAdapter().getItem(position));
             }
         });
 

@@ -8,7 +8,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.nikmalov.portfolioproject.PopularVideoApp.VideoGridActivity;
+import com.nikmalov.portfolioproject.PopularVideoApp.MoviePostersActivity;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -34,7 +34,7 @@ public class CoreMenu extends Activity {
 		setButtons();
 		Resources resources = getResources();
 		projectButtonToActivityMap.
-			put(resources.getString(R.string.popular_movies), VideoGridActivity.class);
+			put(resources.getString(R.string.popular_movies), MoviePostersActivity.class);
 		//new mappings are to be introduced
 	}
 

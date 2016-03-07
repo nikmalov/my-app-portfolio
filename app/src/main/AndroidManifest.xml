@@ -24,7 +24,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".PopularVideoApp.VideoGridActivity"
+            android:name=".PopularVideoApp.MoviePostersActivity"
             android:label="@string/title_activity_video_grid"
             android:parentActivityName=".CoreMenu" >
             <meta-data
@@ -34,21 +34,21 @@
         <activity
             android:name=".PopularVideoApp.MovieDetailActivity"
             android:label="@string/title_activity_movie_detail"
-            android:parentActivityName=".PopularVideoApp.VideoGridActivity" >
+            android:parentActivityName=".PopularVideoApp.MoviePostersActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
                 <category android:name="android.intent.category.DEFAULT" />
             </intent-filter>
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nikmalov.portfolioproject.PopularVideoApp.VideoGridActivity" />
+                android:value=".PopularVideoApp.MoviePostersActivity" />
         </activity>
         <activity android:name=".PopularVideoApp.SettingsActivity"
                   android:label="@string/action_settings"
-                  android:parentActivityName=".PopularVideoApp.VideoGridActivity" >
+                  android:parentActivityName=".PopularVideoApp.MoviePostersActivity" >
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="com.nikmalov.portfolioproject.PopularVideoApp.VideoGridActivity" />
+                android:value=".PopularVideoApp.MoviePostersActivity" />
         </activity>
     </application>
 
