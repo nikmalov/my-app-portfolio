@@ -15,6 +15,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.ProgressBar;
 
 import com.nikmalov.portfolioproject.R;
 import static com.nikmalov.portfolioproject.PopularVideoApp.Utilities.*;
@@ -34,6 +35,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 public class MoviePostersFragment extends Fragment {
 
     private static final String LOG_TAG = MoviePostersFragment.class.getSimpleName();
@@ -43,6 +47,7 @@ public class MoviePostersFragment extends Fragment {
     private ArrayList<Movie> storedMovieList;
     private MovieListType lastLoadedType;
     private MoviePosterAdapter postersAdapter;
+    @Bind(R.id.progressBar) ProgressBar progressBar;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -52,6 +57,7 @@ public class MoviePostersFragment extends Fragment {
         if (savedInstanceState == null || savedInstanceState.isEmpty()) {
             postersAdapter = new MoviePosterAdapter(getActivity(), Collections.EMPTY_LIST);
             new MovieGetterAsyncTask().execute(currentType);
+            showProgress();
         } else {
             storedMovieList = savedInstanceState.getParcelableArrayList(DATA_STORED);
             postersAdapter = new MoviePosterAdapter(getActivity(), storedMovieList);
@@ -69,6 +75,8 @@ public class MoviePostersFragment extends Fragment {
         super.onStart();
         currentType = getCurrentSortingType(getActivity());
         if (currentType != lastLoadedType) {
+            postersAdapter.setMovieList(Collections.EMPTY_LIST);
+            showProgress();
             new MovieGetterAsyncTask().execute(currentType);
         } else if (currentType == MovieListType.FAVOURITES) {
             refreshDisplayedFavourites();
@@ -96,7 +104,7 @@ public class MoviePostersFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.video_grid_fragment, container, false);
-
+        ButterKnife.bind(this, rootView);
         GridView postersGridView = (GridView)rootView.findViewById(R.id.postersGridView);
         postersGridView.setAdapter(postersAdapter);
         postersGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -140,6 +148,16 @@ public class MoviePostersFragment extends Fragment {
         return refreshedMovieList;
     }
 
+    private void showProgress() {
+        if (progressBar != null)
+            progressBar.setVisibility(View.VISIBLE);
+    }
+
+    private void hideProgress() {
+        if (progressBar != null)
+            progressBar.setVisibility(View.GONE);
+    }
+
     private class MovieGetterAsyncTask extends AsyncTask<MovieListType, Void, List<Movie>> {
 
         @Override
@@ -167,6 +185,7 @@ public class MoviePostersFragment extends Fragment {
 
             try {
                 URL url = new URL(URL_REQUEST_ANCHOR + params[0].urlPostfix + API_KEY);
+                Log.d(MovieGetterAsyncTask.class.getSimpleName(), url.toString());
                 urlConnection = (HttpURLConnection)url.openConnection();
                 urlConnection.setRequestMethod("GET");
                 urlConnection.connect();
@@ -205,6 +224,7 @@ public class MoviePostersFragment extends Fragment {
             postersAdapter.setMovieList(movieList);
             storedMovieList = new ArrayList<>(movieList);
             lastLoadedType = currentType;
+            hideProgress();
         }
 
         private List<Movie> parseJsonMovieInfo(String jsonInput) throws JSONException {
