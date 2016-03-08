@@ -30,6 +30,9 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import butterknife.Bind;
+import butterknife.ButterKnife;
+
 /**
  * A placeholder fragment containing a simple view.
  */
@@ -39,7 +42,8 @@ public class MovieDetailActivityFragment extends Fragment {
     private List<String[]> trailers = new ArrayList<>();
     private List<String[]> reviews = new ArrayList<>();
     DetailedViewListAdapter mAdapter;
-    ListView mListView;
+    @Bind(R.id.detailed_movie_list_view) ListView mListView;
+    @Bind(R.id.detailed_movie_header) TextView headerView;
 
     public MovieDetailActivityFragment() {
     }
@@ -70,10 +74,16 @@ public class MovieDetailActivityFragment extends Fragment {
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.movie_detail_fragment, container, false);
-        mListView = (ListView)rootView.findViewById(R.id.detailed_movie_list_view);
-        ((TextView) rootView.findViewById(R.id.detailed_movie_header)).setText(movie.getTitle());
+        ButterKnife.bind(this, rootView);
+        headerView.setText(movie.getTitle());
         mAdapter = new DetailedViewListAdapter(getActivity(), movie, trailers, reviews);
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     class MovieDetailsAsyncTask extends AsyncTask<Integer, Void, Movie> {

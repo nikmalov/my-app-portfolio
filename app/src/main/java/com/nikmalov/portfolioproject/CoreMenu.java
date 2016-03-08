@@ -13,16 +13,12 @@ import com.nikmalov.portfolioproject.PopularVideoApp.MoviePostersActivity;
 import java.util.HashMap;
 import java.util.Map;
 
+import butterknife.ButterKnife;
+import butterknife.OnClick;
+
 public class CoreMenu extends Activity {
 
 	private Toast mAppToast;
-
-	public Button popularMoviesButton;
-	public Button scoresButton;
-	public Button libraryButton;
-	public Button buildItButton;
-	public Button xyzReaderButton;
-	public Button capstoneButton;
 
 	private final static String BUTTON_NOT_FOUND = "Button wasn't found.";
 	private static Map<CharSequence, Class> projectButtonToActivityMap = new HashMap<>(6);
@@ -31,46 +27,15 @@ public class CoreMenu extends Activity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_core_menu);
-		setButtons();
+        ButterKnife.bind(this);
 		Resources resources = getResources();
 		projectButtonToActivityMap.
 			put(resources.getString(R.string.popular_movies), MoviePostersActivity.class);
 		//new mappings are to be introduced
 	}
 
-	public void setButtons() {
-		//for learning purposes first 3 buttons implement xml-based on-click behaviour
-		popularMoviesButton = (Button)findViewById(R.id.app1LaunchButton);
-		scoresButton = (Button)findViewById(R.id.app2LaunchButton);
-		libraryButton = (Button)findViewById(R.id.app3LaunchButton);
-		buildItButton = (Button)findViewById(R.id.app4LaunchButton);
-		buildItButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showMessage(R.string.build_it_bigger);
-			}
-		});
-		xyzReaderButton = (Button)findViewById(R.id.app5LaunchButton);
-		xyzReaderButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showMessage(R.string.xyz_reader);
-			}
-		});
-		capstoneButton = (Button)findViewById(R.id.app6LaunchButton);
-		capstoneButton.setOnClickListener(new View.OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				showMessage(R.string.capstone_project);
-			}
-		});
-	}
-
-	public void showMessage(int appNameId) {
-		String appName = getResources().getString(appNameId);
-		displayMessage("This button will launch my " + appName + "!");
-	}
-
+    //for learning purposes first 3 buttons use xml-based approach
+    @OnClick({R.id.app4LaunchButton, R.id.app5LaunchButton, R.id.app6LaunchButton})
 	public void showMessage(View buttonView) {
 		if (!(buttonView instanceof Button))
 			return;

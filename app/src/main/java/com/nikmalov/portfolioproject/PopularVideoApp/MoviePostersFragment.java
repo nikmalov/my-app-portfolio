@@ -48,6 +48,7 @@ public class MoviePostersFragment extends Fragment {
     private MovieListType lastLoadedType;
     private MoviePosterAdapter postersAdapter;
     @Bind(R.id.progressBar) ProgressBar progressBar;
+    @Bind(R.id.postersGridView) GridView postersGridView;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -105,7 +106,6 @@ public class MoviePostersFragment extends Fragment {
     {
         View rootView = inflater.inflate(R.layout.video_grid_fragment, container, false);
         ButterKnife.bind(this, rootView);
-        GridView postersGridView = (GridView)rootView.findViewById(R.id.postersGridView);
         postersGridView.setAdapter(postersAdapter);
         postersGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
@@ -115,6 +115,12 @@ public class MoviePostersFragment extends Fragment {
         });
 
         return rootView;
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        ButterKnife.unbind(this);
     }
 
     /**
