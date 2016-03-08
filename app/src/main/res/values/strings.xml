@@ -21,6 +21,7 @@
     <string name="sorting_type_favourites">Favourites</string>
     <string name="mark_favourite">MARK AS FAVOURITE</string>
     <string name="unmark_favourite">UNMARK</string>
+    <string name="share_trailer_menu_item_label">Share trailer</string>
 
     <string name="duration_format">%d min</string>
     <string name="movie_poster">Movie poster</string>

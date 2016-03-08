@@ -56,6 +56,10 @@ public class DetailedViewListAdapter extends BaseAdapter {
         this.trailersList = trailersList;
     }
 
+    public List<String[]> getTrailersList() {
+        return trailersList;
+    }
+
     public void setReviews(List<String[]> reviews) {
         this.reviews = reviews;
     }

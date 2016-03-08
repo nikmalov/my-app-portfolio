@@ -5,8 +5,13 @@ import android.database.Cursor;
 import android.os.AsyncTask;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v7.widget.ShareActionProvider;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
@@ -15,6 +20,7 @@ import android.widget.TextView;
 import com.nikmalov.portfolioproject.R;
 import static com.nikmalov.portfolioproject.PopularVideoApp.Utilities.*;
 import static com.nikmalov.portfolioproject.PopularVideoApp.data.FavouriteMoviesContract.FavouriteMovieEntry.buildSingleMovieUri;
+import static java.util.Collections.*;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -39,8 +45,8 @@ import butterknife.ButterKnife;
 public class MovieDetailActivityFragment extends Fragment {
 
     private Movie movie;
-    private List<String[]> trailers = new ArrayList<>();
-    private List<String[]> reviews = new ArrayList<>();
+    ShareActionProvider shareActionProvider;
+    Intent shareIntent;
     DetailedViewListAdapter mAdapter;
     @Bind(R.id.detailed_movie_list_view) ListView mListView;
     @Bind(R.id.detailed_movie_header) TextView headerView;
@@ -51,6 +57,7 @@ public class MovieDetailActivityFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setHasOptionsMenu(true);
         Bundle args = getArguments();
         if (args != null && args.getParcelable(Movie.MOVIE) != null) {
             movie = args.getParcelable(Movie.MOVIE);
@@ -70,13 +77,30 @@ public class MovieDetailActivityFragment extends Fragment {
     }
 
     @Override
+    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
+        inflater.inflate(R.menu.menu_movie_detail, menu);
+        MenuItem shareItem = menu.findItem(R.id.share_menu_item);
+        shareActionProvider = (ShareActionProvider)MenuItemCompat.getActionProvider(shareItem);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == R.id.share_menu_item) {
+            setShareIntent(shareIntent != null ? shareIntent : createShareTrailerIntent());
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View rootView = inflater.inflate(R.layout.movie_detail_fragment, container, false);
         ButterKnife.bind(this, rootView);
         headerView.setText(movie.getTitle());
-        mAdapter = new DetailedViewListAdapter(getActivity(), movie, trailers, reviews);
+        mAdapter = new DetailedViewListAdapter(getActivity(), movie, EMPTY_LIST, EMPTY_LIST);
         return rootView;
     }
 
@@ -84,6 +108,19 @@ public class MovieDetailActivityFragment extends Fragment {
     public void onDestroyView() {
         super.onDestroyView();
         ButterKnife.unbind(this);
+    }
+
+    private Intent createShareTrailerIntent() {
+        Intent shareIntent = new Intent(Intent.ACTION_SEND);
+        shareIntent.setType("text/plain");
+        String trailerId = mAdapter.getTrailersList().get(0)[1];
+        shareIntent.putExtra(Intent.EXTRA_TEXT, Utilities.getYouTubeLink(trailerId).toString());
+        return shareIntent;
+    }
+
+    private void setShareIntent(Intent intent) {
+        if (shareActionProvider != null)
+            shareActionProvider.setShareIntent(intent);
     }
 
     class MovieDetailsAsyncTask extends AsyncTask<Integer, Void, Movie> {
@@ -216,8 +253,13 @@ public class MovieDetailActivityFragment extends Fragment {
         @Override
         protected void onPostExecute(List<String[]> trailers) {
             if (trailers != null) {
+
                 mAdapter.setTrailersList(trailers);
                 mListView.setAdapter(mAdapter);
+                if (!trailers.isEmpty()) {
+                    shareIntent = createShareTrailerIntent();
+                    setShareIntent(shareIntent);
+                }
             }
             Log.i(getClass().getSimpleName(), "Finished loading movie trailers.");
         }
